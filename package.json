@@ -1,23 +1,23 @@
 {
   "name": "grunt-build-release",
   "description": "Grunt plugin for build releases, tagging and raygun deployment",
-  "version": "0.1.0",
-  "homepage": "https://github.com/vishwanatharondekar/grunt-build-release",
+  "version": "0.1.1",
+  "homepage": "https://github.com/Flutterbee/grunt-build-release",
   "author": {
-    "name": "Vishwanath",
-    "email": "vishwanatharondekar@gmail.com"
+    "name": "tinyowl",
+    "email": "developer@tinyowl.co.in"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/vishwanatharondekar/grunt-build-release.git"
+    "url": "git://github.com/Flutterbee/grunt-build-release.git"
   },
   "bugs": {
-    "url": "https://github.com/vishwanatharondekar/grunt-build-release/issues"
+    "url": "https://github.com/Flutterbee/grunt-build-release/issues"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/vishwanatharondekar/grunt-build-release/blob/master/LICENSE-MIT"
+      "url": "https://github.com/Flutterbee/grunt-build-release/blob/master/LICENSE-MIT"
     }
   ],
   "engines": {
