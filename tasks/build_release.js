@@ -59,45 +59,32 @@ module.exports = function(grunt) {
           grunt.fatal('Can not get a version number using `git describe`' + JSON.stringify(err) );
         }
 
+        var currBuildNumber = 1;
         lastTag = stdout.trim();
 
         var lastVersion = lastTag.replace('v', '');
-        lastVersion = lastVersion.split("-")[1];
-
-        console.log('lastVersion : ', lastVersion);
-
-        var splitVersion = lastVersion.split(".");
-        var gitYear = splitVersion[0];
-        var gitMonth = splitVersion[1];
-        var gitDate = splitVersion[2];
-        var gitBuildNumber = splitVersion[3];
-
 
         var today = new Date();
         var currYear = today.getYear()-100+"";
         var currMonth = (today.getMonth() + 1)<10 ? "0" + (today.getMonth() + 1): ""+(today.getMonth() + 1);
         var currDate = today.getDate()<10 ? "0" + today.getDate() : "" + today.getDate();
 
+        lastVersion = lastVersion.split("-")[1];
 
-        var currBuildNumber = null;
+        if(lastVersion){
+          var splitVersion = lastVersion.split(".");
+          var gitYear = splitVersion[0];
+          var gitMonth = splitVersion[1];
+          var gitDate = splitVersion[2];
+          var gitBuildNumber = splitVersion[3];
 
-        console.log(gitYear==currYear && gitMonth==currMonth && gitDate==currDate);
-
-        console.log(gitYear);
-        console.log(currYear)
-        console.log(gitMonth==currMonth)
-        console.log(gitDate==currDate)
-
-        if(gitYear==currYear && gitMonth==currMonth && gitDate==currDate){
-          currBuildNumber = ++gitBuildNumber;
-        } else {
-          currBuildNumber = 1;
+          if(gitYear==currYear && gitMonth==currMonth && gitDate==currDate){
+            currBuildNumber = ++gitBuildNumber;
+          }
         }
 
         var version = currYear+"." + currMonth + "." + currDate + "." +  currBuildNumber;
-
         console.log('version : ', version);
-
         tagName = "v" + options.CONTAINER + "-" + version;
 
         next();
