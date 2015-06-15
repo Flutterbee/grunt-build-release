@@ -17,9 +17,6 @@ module.exports = function(grunt) {
 
   grunt.registerTask('build_release', 'Grunt plugin for build releases, tagging and raygun deployment', function(CONTAINER) {
 
-    console.log(CONTAINER);
-
-
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
       createTag : true,
@@ -45,7 +42,7 @@ module.exports = function(grunt) {
 
 
 
-    var gitDescribeOptions = '$(git rev-list --tags --max-count=1)';
+    var gitDescribeOptions = '$(git for-each-ref refs/tags --sort=-taggerdate --format="%(refname)" --count=1)';
     var done = this.async();
     var dryRun = false;
 
@@ -62,7 +59,7 @@ module.exports = function(grunt) {
         var currBuildNumber = 1;
         lastTag = stdout.trim();
 
-        var lastVersion = lastTag.replace('v', '');
+        var lastVersion = lastTag.substr(lastTag.length-10); //Take last 10 digits
 
         var now = new Date();
         var today = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
@@ -71,9 +68,7 @@ module.exports = function(grunt) {
         var currMonth = (today.getMonth() + 1)<10 ? "0" + (today.getMonth() + 1): ""+(today.getMonth() + 1);
         var currDate = today.getDate()<10 ? "0" + today.getDate() : "" + today.getDate();
 
-        lastVersion = lastVersion.split("-")[1];
-
-        if(lastVersion){
+        if(lastVersion && (/^\d\d\.\d\d\.\d\d\.\d$/).test(lastVersion)){
           var splitVersion = lastVersion.split(".");
           var gitYear = splitVersion[0];
           var gitMonth = splitVersion[1];
@@ -86,7 +81,6 @@ module.exports = function(grunt) {
         }
 
         var version = currYear+"." + currMonth + "." + currDate + "." +  currBuildNumber;
-        console.log('version : ', version);
         tagName = "v" + options.CONTAINER + "-" + version;
 
         next();
@@ -98,7 +92,6 @@ module.exports = function(grunt) {
 
       exec(cmd , function(err, stdout, stderr) {
         tagMessage = stdout.trim();
-        console.log('tagMessage : ', tagMessage);
         next();
       });
 
