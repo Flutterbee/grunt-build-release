@@ -73,7 +73,9 @@ module.exports = function(grunt) {
         var gitBuildNumber = splitVersion[3];
 
 
-        var today = new Date();
+        var now = new Date();
+        var today = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+
         var currYear = today.getYear()-100+"";
         var currMonth = (today.getMonth() + 1)<10 ? "0" + (today.getMonth() + 1): ""+(today.getMonth() + 1);
         var currDate = today.getDate()<10 ? "0" + today.getDate() : "" + today.getDate();
