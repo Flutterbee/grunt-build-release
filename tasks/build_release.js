@@ -45,7 +45,7 @@ module.exports = function(grunt) {
 
 
 
-    var gitDescribeOptions = '$(git rev-list --tags --max-count=1)';
+    var gitDescribeOptions = '$(git for-each-ref refs/tags --sort=-taggerdate --format="%(refname)" --count=1)';
     var done = this.async();
     var dryRun = false;
 
@@ -61,8 +61,7 @@ module.exports = function(grunt) {
 
         lastTag = stdout.trim();
 
-        var lastVersion = lastTag.replace('v', '');
-        lastVersion = lastVersion.split("-")[1];
+        var lastVersion = lastTag.substr(lastTag.length-10); //Take last 10 digits
 
         console.log('lastVersion : ', lastVersion);
 
