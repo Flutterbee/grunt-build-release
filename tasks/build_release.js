@@ -17,9 +17,6 @@ module.exports = function(grunt) {
 
   grunt.registerTask('build_release', 'Grunt plugin for build releases, tagging and raygun deployment', function(CONTAINER) {
 
-    console.log(CONTAINER);
-
-
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
       createTag : true,
@@ -59,18 +56,10 @@ module.exports = function(grunt) {
           grunt.fatal('Can not get a version number using `git describe`' + JSON.stringify(err) );
         }
 
+        var currBuildNumber = 1;
         lastTag = stdout.trim();
 
         var lastVersion = lastTag.substr(lastTag.length-10); //Take last 10 digits
-
-        console.log('lastVersion : ', lastVersion);
-
-        var splitVersion = lastVersion.split(".");
-        var gitYear = splitVersion[0];
-        var gitMonth = splitVersion[1];
-        var gitDate = splitVersion[2];
-        var gitBuildNumber = splitVersion[3];
-
 
         var now = new Date();
         var today = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
@@ -79,26 +68,19 @@ module.exports = function(grunt) {
         var currMonth = (today.getMonth() + 1)<10 ? "0" + (today.getMonth() + 1): ""+(today.getMonth() + 1);
         var currDate = today.getDate()<10 ? "0" + today.getDate() : "" + today.getDate();
 
+        if(lastVersion && (/^\d\d\.\d\d\.\d\d\.\d$/).test(lastVersion)){
+          var splitVersion = lastVersion.split(".");
+          var gitYear = splitVersion[0];
+          var gitMonth = splitVersion[1];
+          var gitDate = splitVersion[2];
+          var gitBuildNumber = splitVersion[3];
 
-        var currBuildNumber = null;
-
-        console.log(gitYear==currYear && gitMonth==currMonth && gitDate==currDate);
-
-        console.log(gitYear);
-        console.log(currYear)
-        console.log(gitMonth==currMonth)
-        console.log(gitDate==currDate)
-
-        if(gitYear==currYear && gitMonth==currMonth && gitDate==currDate){
-          currBuildNumber = ++gitBuildNumber;
-        } else {
-          currBuildNumber = 1;
+          if(gitYear==currYear && gitMonth==currMonth && gitDate==currDate){
+            currBuildNumber = ++gitBuildNumber;
+          }
         }
 
         var version = currYear+"." + currMonth + "." + currDate + "." +  currBuildNumber;
-
-        console.log('version : ', version);
-
         tagName = "v" + options.CONTAINER + "-" + version;
 
         next();
@@ -110,7 +92,6 @@ module.exports = function(grunt) {
 
       exec(cmd , function(err, stdout, stderr) {
         tagMessage = stdout.trim();
-        console.log('tagMessage : ', tagMessage);
         next();
       });
 
