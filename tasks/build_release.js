@@ -68,7 +68,7 @@ module.exports = function(grunt) {
         var currMonth = (today.getMonth() + 1)<10 ? "0" + (today.getMonth() + 1): ""+(today.getMonth() + 1);
         var currDate = today.getDate()<10 ? "0" + today.getDate() : "" + today.getDate();
 
-        if(lastVersion && (/^\d\d\.\d\d\.\d\d\.\d$/).test(lastVersion)){
+        if(lastVersion && (/^\d\d\.\d\d\.\d\d\.\d{1,2}$/).test(lastVersion)){
           var splitVersion = lastVersion.split(".");
           var gitYear = splitVersion[0];
           var gitMonth = splitVersion[1];
@@ -91,7 +91,7 @@ module.exports = function(grunt) {
       var cmd = 'git shortlog --oneline --no-merges -n ' + lastTag + '..HEAD';
 
       exec(cmd , function(err, stdout, stderr) {
-        tagMessage = stdout.trim();
+        tagMessage = stdout.trim().replace(/"/g, '');
         next();
       });
 
