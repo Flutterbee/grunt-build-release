@@ -92,6 +92,7 @@ module.exports = function(grunt) {
 
       exec(cmd , function(err, stdout, stderr) {
         tagMessage = stdout.trim().replace(/"/g, '');
+        tagMessage = tagMessage.replace(/`/g, '');
         next();
       });
 
